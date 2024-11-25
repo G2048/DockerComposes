@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres
+    shm_size: 128M
+    ports:
+      - "8432:5432"
+    volumes:
+      - .init_db/user-db.sh:/docker-entrypoint-initdb.d/user-db.sh
+      - .init_db/demo-big-20170815.sql:/docker-entrypoint-initdb.d/demo-big-20170815.sql
+      - .pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U habrpguser -d habrdb" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 10s
+#    restart: always
+#    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
