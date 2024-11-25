@@ -1,0 +1,43 @@
+services:
+  staffcop1:
+    image: "staffcop_v2:1.1"
+    hostname: staffcop1
+    volumes:
+      - type: bind
+        source: postgresql1/staffcop
+        target: /var/lib/postgresql
+        read_only: false
+    expose:
+      - 5432
+    ports:
+      - 1443:443
+      - 1999:80
+      - 5432:5432
+
+  staffcop2:
+    image: "staffcop_v2"
+    hostname: staffcop2
+    volumes:
+      - type: bind
+        source: postgresql2/staffcop
+        target: /var/lib/postgresql
+        read_only: false
+    expose:
+      - 5432
+    ports:
+      - 2443:443
+      - 2999:80
+      - 6432:5432
+
+volumes:
+  postgresql_staffcop1:
+    driver: local
+    driver_opts:
+      type: ext4
+      o: bind
+
+  postgresql_staffcop2:
+    driver: local
+    driver_opts:
+      type: ext4
+      o: volume
