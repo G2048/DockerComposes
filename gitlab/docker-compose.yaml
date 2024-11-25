@@ -1,0 +1,39 @@
+# User: root
+# FOR getting a password:
+# docker exec -it $(docker ps | grep 'gitlab/gitlab-ce' | awk '{print $1}') grep 'Password:' /etc/gitlab/initial_root_password
+#
+# More ways:
+# https://docs.gitlab.com/ee/install/docker/installation.html#install-gitlab-by-using-docker-compose
+#
+# ATTENTION:
+#   The password file is automatically deleted in the first container restart after 24 hours.
+services:
+  gitlab:
+    image: gitlab/gitlab-ce
+    # shm-size: '256m'
+    volumes:
+      - .config:/etc/gitlab
+      - .logs:/var/log/gitlab
+      - .data:/var/opt/gitlab
+    expose: ["4443"]
+    ports:
+      - '8929:8929'
+      - '4443:443'
+      - '8000:80'
+      - '2424:22'
+
+# AFTER:
+# To config the ssh:
+#
+# In ~/.ssh/config :
+# Host git.net
+    # User git
+    # Hostname localhost
+    # Port 2424
+    # Preferredauthentications publickey
+    # IdentityFile ~/.ssh/id_rsa
+    # TCPKeepAlive yes
+    # AddKeysToAgent yes
+    #
+# GIT clone:
+# git clone git@git.net:username/test_go_project.git
