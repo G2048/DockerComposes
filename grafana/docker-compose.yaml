@@ -1,0 +1,15 @@
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+     - GF_SERVER_ROOT_URL=http://my.grafana.server/
+     - GF_PLUGINS_PREINSTALL=grafana-clock-panel
+    # if you are running as root then set it to 0
+    # else find the right id with the id -u command
+    user: '0'
+    ports:
+     - '4000:3000'
+    volumes:
+      - '$PWD/data:/var/lib/grafana'
